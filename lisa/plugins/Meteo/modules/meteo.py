@@ -6,11 +6,11 @@ import gettext
 import inspect
 import os
 import requests
-
+import json
 
 class Meteo(IPlugin):
     def __init__(self):
-        super(Meteo, self).__init_()
+        super(Meteo, self).__init__()
         self.configuration_plugin = self.mongo.lisa.plugins.find_one({"name": "Meteo"})
         self.path = os.path.realpath(os.path.abspath(os.path.join(os.path.split(
             inspect.getfile(inspect.currentframe()))[0],os.path.normpath("../lang/"))))
@@ -20,7 +20,7 @@ class Meteo(IPlugin):
                                                    languages=[self.configuration_lisa['lang']]).ugettext
 
     def weatherAPI(self, city):
-        if self.configuration['configuration']['temperature'] == "celsius":
+        if self.configuration_plugin['configuration']['temperature'] == "celsius":
             units = "metric"
         else:
             units = "imperial"
@@ -29,22 +29,31 @@ class Meteo(IPlugin):
             'units': units,
             'q': ','.join([city, self.configuration_lisa['lang']]),
         })
-        if r.ok:
+        print "weather " + json.dumps(r.json())
+        if r.ok and r.json().has_key('main') == True:
+            if r.json()['main'].has_key('temp') == False:
+                r.json()['main']['temp'] = -1
+            if r.json()['main'].has_key('humidity') == False:
+                r.json()['main']['humidity'] = -1
+            if r.json().has_key('wind') == False or r.json()['wind'].has_key('speed') == False:
+                weather['wind']['speed'] = -1
             return r.json()
         else:
             return {"problem": self._('problem contacting server')}
 
     def getWeather(self, jsonInput):
-        if jsonInput['outcome']['entities']['city']['value']:
-            city = jsonInput['outcome']['entities']['city']['value']
-        else:
+        if jsonInput.has_key('outcome') == False or jsonInput['outcome'].has_key('entities') == False or jsonInput['outcome']['entities'].has_key('location') == False or jsonInput['outcome']['entities']['location'].has_key('value') == False:
             city = self.configuration_plugin['configuration']['city']
+        else:
+            city = jsonInput['outcome']['entities']['location']['value']
         weather = self.weatherAPI(city)
         if self.configuration_plugin['configuration']['temperature'] == "celsius":
             windspeed = round(weather['wind']['speed'] * 3.6)
         else:
             windspeed = round(weather['wind']['speed'] * 2.2369)
-        if "problem" not in weather:
+        if weather.has_key("problem") == True:
+            body = weather['problem']
+        else:
             body = ", ".join([
                 self._('weather in city') % city,
                 self._('climat') % weather['weather'][0]['description'],
@@ -52,8 +61,6 @@ class Meteo(IPlugin):
                 self._('humidity') % round(weather['main']['humidity']),
                 self._('wind speed') % windspeed
             ])
-        else:
-            body = weather['problem']
         return {"plugin": "Meteo",
                 "method": "getWeather",
                 "body": body
