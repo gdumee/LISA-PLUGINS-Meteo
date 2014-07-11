@@ -29,15 +29,3 @@ msgstr "The humidity is %d%%"
 
 msgid "wind speed"
 msgstr "The speed of the wind is %i miles per hour"
-
-msgid "I dont know this city"
-msgstr "I don't konw this city"
-
-msgid "Default city"
-msgstr "Default city for weather is %s."
-
-msgid "Default city set"
-msgstr "Default city for weather set to %s."
-
-
-

@@ -12,20 +12,145 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 #: ../../modules/meteo.py
-msgid "problem contacting server"
-msgstr "Il y a eu un problème lors de la connexion au serveur de météo."
 
-msgid "temperature"
-msgstr "Il fait %i degrés"
+#---------error
+msgid "problem contacting server"
+msgstr "Il y a eu un problème lors de la connexion au serveur de météo. "
+
+msgid "I dont know this city"
+msgstr "Je ne connais pas la ville demandée. "
+
+msgid "Default city"
+msgstr "La ville par défaut pour la météo est {0}. "
+
+msgid "I don't understand city name"
+msgstr "Je n'ai pas compris le nom de la ville. "
+
+
+#---------main
 
 msgid "weather in city"
-msgstr "Voici le temps à %s"
+msgstr "Voici le temps à {0} "
+
+msgid "now"
+msgstr " actuellement. "
+
+msgid "tomorrow"
+msgstr "pour demain. "
+
+msgid "after tomorrow"
+msgstr "pour aprés demain. "
 
 msgid "climat"
-msgstr "%s"
+msgstr "{0}. "
+
+msgid "cloud"
+msgstr "La couverture nuageuse est de {0}%. "
+
+msgid "future cloud"
+msgstr "La couverture nuageuse sera de {0}%. "
+
+msgid "temperature"
+msgstr "Il fait {0} degrés. "
+
+msgid "future temperature"
+msgstr "La température sera de "
+
+msgid "morning"
+msgstr "{0} degrés le matin, "
+
+msgid "day"
+msgstr "{0} degrés durant la journée, "
+
+msgid "evening"
+msgstr "{0} degrés pour la soirée, "
 
 msgid "humidity"
-msgstr "Le taux d'humidité est de %d%%"
+msgstr "Le taux d'humidité est de {0}%, "
+
+msgid "wind"
+msgstr "{0} souffle depuis le {1}. "
+
+msgid "future wind"
+msgstr "{0} soufflera depuis le {1}. "
 
 msgid "wind speed"
-msgstr "La vitesse du vent est de %ikm heure"
+msgstr "La vitesse du vent est de {0}km heure  "
+
+msgid "future wind speed"
+msgstr "La vitesse du vent sera de {0}km heure  "
+
+msgid "not yet"
+msgstr  "Je ne connais pas encore la météo à cette date"
+
+msgid "previous date"
+msgstr "(10,\"Je ne peux pas donner la météo des jours précedents.\"),"
+"(10,\"Je ne connais pas la météo des jours passés.\")"
+
+
+
+#---------wind direction
+
+msgid "Noth"
+msgstr "Nord"
+
+msgid "North Est"
+msgstr "Nord Est"
+
+msgid "Est"
+msgstr "Est"
+
+msgid "South Est"
+msgstr "Sud Est"
+
+msgid "South"
+msgstr "Sud"
+
+msgid "South West"
+msgstr "Sud Ouest"
+
+msgid "West"
+msgstr "Ouest"
+
+msgid "North West"
+msgstr "Nord Ouest"
+
+
+
+#---------month
+
+msgid "January"
+msgstr "janvier "
+
+msgid "February"
+msgstr "février "
+
+msgid "March"
+msgstr "Mars "
+
+msgid "April"
+msgstr "Avril "
+
+msgid "May"
+msgstr "Mai "
+
+msgid "June"
+msgstr "Juin "
+
+msgid "July"
+msgstr "Juillet "
+
+msgid "August"
+msgstr "Aout "
+
+msgid "Septembre"
+msgstr "Septembre "
+
+msgid "October"
+msgstr "Octobre "
+
+msgid "November"
+msgstr "Novembre "
+
+msgid "December"
+msgstr "Décembre "

@@ -1,7 +1,7 @@
 {
     "name": "Meteo",
-    "version": "1.0.1",
-    "author": "Julien Syx",
+    "version": "1.0.0",
+    "author": "Guillaume",
     "description": [
         {"lang": "fr", "description": "Ce plugin permet de donner la météo"},
         {"lang": "en", "description": "This plugin give the weather for a city"}
@@ -16,6 +16,14 @@
         "intents": {
             "meteo_getweather": {
                 "method": "getWeather",
+                "corpus": {}
+            },
+            "meteo_setDefaultCity": {
+                "method": "setDefaultCity",
+                "corpus": {}
+            },
+            "meteo_getDefaultCity": {
+                "method": "getDefaultCity",
                 "corpus": {}
             }
         },

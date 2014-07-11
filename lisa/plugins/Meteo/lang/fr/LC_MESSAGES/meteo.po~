@@ -5,39 +5,27 @@ msgstr ""
 "POT-Creation-Date: 2013-09-22 09:30+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Julien SYX <julien.syx@lisa-project.net>\n"
-"Language-Team: EN <julien.syx@lisa-project.net>\n"
-"Language: en\n"
+"Language-Team: FR <julien.syx@lisa-project.net>\n"
+"Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
 #: ../../modules/meteo.py
 msgid "problem contacting server"
-msgstr "There was a problem contacting the server"
+msgstr "Il y a eu un problème lors de la connexion au serveur de météo."
 
 msgid "temperature"
-msgstr "The temperature is %i degrees"
+msgstr "Il fait %i degrés"
 
 msgid "weather in city"
-msgstr "Here the weather in %s"
+msgstr "Voici le temps à %s"
 
 msgid "climat"
 msgstr "%s"
 
 msgid "humidity"
-msgstr "The humidity is %d%%"
+msgstr "Le taux d'humidité est de %d%%"
 
 msgid "wind speed"
-msgstr "The speed of the wind is %i miles per hour"
-
-msgid "I dont know this city"
-msgstr "I don't konw this city"
-
-msgid "Default city"
-msgstr "Default city for weather is %s."
-
-msgid "Default city set"
-msgstr "Default city for weather set to %s."
-
-
-
+msgstr "La vitesse du vent est de %ikm heure"
