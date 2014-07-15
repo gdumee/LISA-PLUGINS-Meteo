@@ -1,10 +1,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 0.1\n"
-"Report-Msgid-Bugs-To: Julien Syx\n"
+"Report-Msgid-Bugs-To: Guillaume\n"
 "POT-Creation-Date: 2013-09-22 09:30+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Julien SYX <julien.syx@lisa-project.net>\n"
+"Last-Translator: Guillaume <julien.syx@lisa-project.net>\n"
 "Language-Team: FR <julien.syx@lisa-project.net>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
@@ -15,142 +15,137 @@ msgstr ""
 
 #---------error
 msgid "problem contacting server"
-msgstr "Il y a eu un problème lors de la connexion au serveur de météo. "
+msgstr  "Il y a eu un problème lors de la connexion au serveur de météo"
 
 msgid "I dont know this city"
-msgstr "Je ne connais pas la ville demandée. "
+msgstr  "Je ne connais pas la ville demandée"
 
 msgid "Default city"
-msgstr "La ville par défaut pour la météo est {0}. "
+msgstr  "La ville par défaut pour la météo est {0}"
 
 msgid "I don't understand city name"
-msgstr "Je n'ai pas compris le nom de la ville. "
+msgstr  "Je n'ai pas compris le nom de la ville"
 
 
 #---------main
-
 msgid "weather in city"
-msgstr "Voici le temps à {0} "
+msgstr  "Voici le temps à {0}"
 
 msgid "now"
-msgstr " actuellement. "
+msgstr  " "
 
 msgid "tomorrow"
-msgstr "pour demain. "
+msgstr  "pour demain"
 
 msgid "after tomorrow"
-msgstr "pour aprés demain. "
+msgstr  "pour aprés demain"
 
 msgid "climat"
-msgstr "{0}. "
+msgstr  "{0}"
 
 msgid "cloud"
-msgstr "La couverture nuageuse est de {0}%. "
+msgstr  "La couverture nuageuse est de {0}%"
 
 msgid "future cloud"
-msgstr "La couverture nuageuse sera de {0}%. "
+msgstr  "La couverture nuageuse sera de {0}%"
 
 msgid "temperature"
-msgstr "Il fait {0} degrés. "
+msgstr  "Il fait {0} degrés"
 
 msgid "future temperature"
 msgstr "La température sera de "
 
 msgid "morning"
-msgstr "{0} degrés le matin, "
+msgstr  "{0} degrés le matin"
 
 msgid "day"
-msgstr "{0} degrés durant la journée, "
+msgstr  "{0} degrés durant la journée"
 
 msgid "evening"
-msgstr "{0} degrés pour la soirée, "
+msgstr  "{0} degrés pour la soirée"
 
 msgid "humidity"
-msgstr "Le taux d'humidité est de {0}%, "
+msgstr  "Le taux d'humidité est de {0}%"
 
 msgid "wind"
-msgstr "{0} souffle depuis le {1}. "
+msgstr  "{0} souffle depuis {1}"
 
 msgid "future wind"
-msgstr "{0} soufflera depuis le {1}. "
+msgstr  "{0} soufflera depuis {1}"
 
 msgid "wind speed"
-msgstr "La vitesse du vent est de {0}km heure  "
+msgstr  "La vitesse du vent est de {0}km heure"
 
 msgid "future wind speed"
-msgstr "La vitesse du vent sera de {0}km heure  "
+msgstr  "La vitesse du vent sera de {0}km heure"
 
 msgid "not yet"
 msgstr  "Je ne connais pas encore la météo à cette date"
 
 msgid "previous date"
-msgstr "(10,\"Je ne peux pas donner la météo des jours précedents.\"),"
-"(10,\"Je ne connais pas la météo des jours passés.\")"
-
+msgstr  "(10, \"Je ne peux pas donner la météo des jours précedents\"),"
+        "(10, \"Je ne connais pas la météo des jours passés\")"
 
 
 #---------wind direction
-
-msgid "Noth"
-msgstr "Nord"
+msgid "North"
+msgstr  "le Nord"
 
 msgid "North Est"
-msgstr "Nord Est"
+msgstr  "le Nord Est"
 
 msgid "Est"
-msgstr "Est"
+msgstr  "le Est"
 
 msgid "South Est"
-msgstr "Sud Est"
+msgstr  "le Sud Est"
 
 msgid "South"
-msgstr "Sud"
+msgstr  "le Sud"
 
 msgid "South West"
-msgstr "Sud Ouest"
+msgstr  "le Sud Ouest"
 
 msgid "West"
-msgstr "Ouest"
+msgstr  "l'Ouest"
 
 msgid "North West"
-msgstr "Nord Ouest"
-
+msgstr  "le Nord Ouest"
 
 
 #---------month
-
 msgid "January"
-msgstr "janvier "
+msgstr  "janvier "
 
 msgid "February"
-msgstr "février "
+msgstr  "février "
 
 msgid "March"
-msgstr "Mars "
+msgstr  "Mars "
 
 msgid "April"
-msgstr "Avril "
+msgstr  "Avril "
 
 msgid "May"
-msgstr "Mai "
+msgstr  "Mai "
 
 msgid "June"
-msgstr "Juin "
+msgstr  "Juin "
 
 msgid "July"
-msgstr "Juillet "
+msgstr  "Juillet "
 
 msgid "August"
-msgstr "Aout "
+msgstr  "Aout "
 
 msgid "Septembre"
-msgstr "Septembre "
+msgstr  "Septembre "
 
 msgid "October"
-msgstr "Octobre "
+msgstr  "Octobre "
 
 msgid "November"
-msgstr "Novembre "
+msgstr  "Novembre "
 
 msgid "December"
-msgstr "Décembre "
+msgstr  "Décembre "
