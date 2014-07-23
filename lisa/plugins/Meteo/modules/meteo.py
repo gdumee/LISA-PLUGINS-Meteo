@@ -311,14 +311,14 @@ class Meteo(IPlugin):
             body += " pour le " + d + " " + self._(datetime.datetime.fromtimestamp(int(r2['dt'])).strftime('%B')) + " ."
         body += ", " + self._('climat').format(r2['weather'][0]['description'])
         if r2['clouds']>= 25 :
-            body += self._('future cloud').format(str(r2['clouds']))
+            body += ", " + self._("future cloud").format(str(r2['clouds']))
         body += ", " + self._("future temperature")
         if pmoment == "Matin" or pmoment == "TouteLaJournee" :
-            body += " " + self._("morning").format(int(r2['temp']['morn']))
+            body += ", " + self._("morning").format(int(r2['temp']['morn']))
         if pmoment == "ApresMidi" or pmoment == "TouteLaJournee" :
-            body += " " + self._("day").format(int(r2['temp']['day']))
+            body += ", " + self._("day").format(int(r2['temp']['day']))
         if pmoment == "Soiree" or pmoment == "TouteLaJournee" :
-            body += " " + self._("evening").format(int(r2['temp']['eve']))
+            body += ", " + self._("evening").format(int(r2['temp']['eve']))
         if r2['speed'] >=0.3 :
             body += ", " + self._('future wind').format(self._convertVent(r2['speed']),self._convertDirVent(r2['deg']))
         #body += " " + self._('future wind speed') % self._convertVent(r2['speed'])
