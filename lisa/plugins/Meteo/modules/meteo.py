@@ -27,6 +27,7 @@ import requests
 import json
 import datetime
 from lisa.Neotique.NeoTrans import NeoTrans
+from lisa.Neotique.NeoConv import NeoConv
 
 
 #-----------------------------------------------------------------------------
@@ -37,11 +38,7 @@ class Meteo(IPlugin):
     Plugin main class
     """
     def __init__(self):
-        super(Meteo, self).__init__()
-
-        self.configuration_plugin = self.mongo.lisa.plugins.find_one({"name": "Meteo"})
-        self.path = os.path.realpath(os.path.abspath(os.path.join(os.path.split(inspect.getfile(inspect.currentframe()))[0],os.path.normpath("../lang/"))))
-        self._ = NeoTrans(domain='meteo',localedir=self.path,fallback=True,languages=[self.configuration_lisa['lang']]).Trans
+        super(Meteo, self).__init__(plugin_name = "Meteo")
 
     #-----------------------------------------------------------------------------
     #              Publics  Fonctions
@@ -54,10 +51,10 @@ class Meteo(IPlugin):
         try:
             city = jsonInput['outcome']['entities']['location']['value']
         except:
-            city = self.configuration_plugin['configuration']['city']   #default city
+            city = self.configuration_plugin['city']   #default city
 
         # Config unit
-        if self.configuration_plugin['configuration']['temperature'] == "celsius":
+        if self.configuration_plugin['temperature'] == "celsius":
             units = "metric"
         else:
             units = "imperial"
@@ -71,7 +68,7 @@ class Meteo(IPlugin):
             return {"plugin": __name__.split('.')[-1], "method": sys._getframe().f_code.co_name, "body": self._("previous date")}
         if dMeteo['deltaJour'] > 10 :
             return {"plugin": __name__.split('.')[-1], "method": sys._getframe().f_code.co_name, "body": self._("not yet")}
-        
+
         if dMeteo['deltaJour'] == 0 :         #meteo de maintenant
             weather = self._weatherAPINow(city, units)
         else :                                   #meteo du jour ou des jours suivants
@@ -90,19 +87,17 @@ class Meteo(IPlugin):
             return {"plugin": __name__.split('.')[-1], "method": sys._getframe().f_code.co_name, "body": self._("I don't understand city name")}
 
         r = requests.get('http://api.openweathermap.org/data/2.5/weather?', params={
-            'lang': self.configuration_lisa['lang'],
-            'q': ','.join([city, self.configuration_lisa['lang']])
+            'lang': self.configuration_server['lang_short'],
+            'q': ','.join([city, self.configuration_server['lang_short']])
         })
-        if r.json()['name'].lower().replace('-', ' ') <> city.lower().replace('-', ' '):
+        if NeoConv.compareSimilar(r.json()['name'], city) == False:
             return {"plugin": __name__.split('.')[-1], "method": sys._getframe().f_code.co_name, "body": self._("I dont know this city")}
 
         #save in database
-        self.mongo.lisa.plugins.update(
-            {'_id': self.configuration_plugin['_id']},
-            {'$set': {'configuration.city': city}},
-            upsert=True
-        )
-        sMessage = self._('Default city').format(city)
+        self.plugin.configuration['city'] = r.json()['name']
+        self.plugin.save()
+
+        sMessage = self._('Default city').format(r.json()['name'])
         return {"plugin": __name__.split('.')[-1], "method": sys._getframe().f_code.co_name, "body": sMessage}
 
     #-----------------------------------------------------------------------------
@@ -110,7 +105,7 @@ class Meteo(IPlugin):
         """
         ask for defautl city
         """
-        city = self.configuration_plugin['configuration']['city']
+        city = self.configuration_plugin['city']
         sMessage = self._("Default city").format(city)
         return {"plugin": __name__.split('.')[-1], "method": sys._getframe().f_code.co_name, "body": sMessage}
 
@@ -168,9 +163,9 @@ class Meteo(IPlugin):
         """
         #la requete est de la forme   http://api.openweathermap.org/data/2.5/weather?q=Rochefort(ville),fr(pays)&units=metric(ou imperial)&lang=FR
         r = requests.get('http://api.openweathermap.org/data/2.5/weather?', params={
-            'lang': self.configuration_lisa['lang'],
+            'lang': self.configuration_server['lang_short'],
             'units': punits,
-            'q': ','.join([pcity, self.configuration_lisa['lang']]),
+            'q': ','.join([pcity, self.configuration_server['lang_short']]),
             'type' : 'accurate',
         })
         #print r.json()
@@ -198,7 +193,7 @@ class Meteo(IPlugin):
         #}
 
         #verif
-        if r.json()['name'].lower().replace('-', ' ') <> pcity.lower().replace('-', ' '):
+        if NeoConv.compareSimilar(r.json()['name'], pcity) == False:
             return self._("I dont know this city")
 
         if r.json().has_key('main') == False or r.json()['main'].has_key('temp') == False or  r.json()['main'].has_key('humidity') == False or \
@@ -215,7 +210,7 @@ class Meteo(IPlugin):
         #       self._('wind speed') % self.__convertVent(r.json()['wind']['speed'])
         #   ])
         body = ""
-        body += self._('weather in city').format(pcity + " " + self._('now'))
+        body += self._('weather in city').format(r.json()['name'] + " " + self._('now'))
         body += ", " + self._('climat').format(r.json()['weather'][0]['description'])
         if r.json()['clouds']['all']>= 25 :
             body += ", " + self._("cloud").format(str(r.json()['clouds']['all']))
@@ -235,9 +230,9 @@ class Meteo(IPlugin):
         """
 
         r = requests.get('http://api.openweathermap.org/data/2.5//forecast/daily?', params={
-            'lang': self.configuration_lisa['lang'],
+            'lang': self.configuration_server['lang_short'],
             'units': punits,
-            'q': ','.join([pcity, self.configuration_lisa['lang']]),
+            'q': ','.join([pcity, self.configuration_server['lang_short']]),
             'cnt' : pCnt + 1,
             'type' : 'accurate',   #<-doesnt work well....
         })
@@ -274,7 +269,7 @@ class Meteo(IPlugin):
         #"cnt": 2}          ou 3/4/5 fonction du nb de liste
 
         #verif ville
-        if r.json()['city']['name'].lower().replace('-', ' ') <> pcity.lower().replace('-', ' '):
+        if NeoConv.compareSimilar(r.json()['city']['name'], pcity) == False:
             return self._("I dont know this city")
 
         #extrait le jour qui convient. La liste est rangee dans l'ordre croissant
@@ -299,7 +294,7 @@ class Meteo(IPlugin):
         #       #self._('wind speed') % self._convertVent(r2['speed']),
         #])
         body =""
-        body += self._('weather in city').format(pcity)
+        body += self._('weather in city').format(r.json()['city']['name'])
         if pCnt == 1 :
             body += " " + self._('tomorrow')
         if pCnt == 2 :
