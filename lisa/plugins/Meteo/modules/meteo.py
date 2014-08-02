@@ -26,7 +26,6 @@ import os, sys
 import requests
 import json
 import datetime
-from lisa.Neotique.NeoTrans import NeoTrans
 from lisa.Neotique.NeoConv import NeoConv
 
 
