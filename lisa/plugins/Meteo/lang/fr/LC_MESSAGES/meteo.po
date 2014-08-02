@@ -2,9 +2,7 @@
 # copyright   : Neotique
 #-----------------------------------------------------------------------------
 msgid ""
-msgstr  "Project-Id-Version: 0.1\n"
-        "Report-Msgid-Bugs-To: Guillaume\n"
-        "Last-Translator: Guillaume <julien.syx@lisa-project.net>\n"
+msgstr  "Last-Translator: Guillaume Audet <guillaume.audet@neotique.fr>\n"
         "Language-Team: Neotique>\n"
         "Language: fr\n"
         "MIME-Version: 1.0\n"
@@ -22,10 +20,10 @@ msgstr  "(10, \"Je peux vous donner la météo\"),"
 
 msgid "i_can_getWeather"
 msgstr  "(10, \"Je peux vous indiquer les prévisions météo sur 7 jours dans une ville\"),"
-        "(10, \"Je peux vous donner la météo d'une ville pour les 7 prochaines jours\"),"
+        "(10, \"Je peux vous donner la météo d'une ville pour les 7 prochains jours\"),"
 
 msgid "i_can_DefaultCity"
-msgstr  "(10, \"Je peux mémoriser la ville par défaut quand vous me demander la météo}\"),"
+msgstr  "(10, \"Je peux mémoriser la ville par défaut quand vous me demander la météo\"),"
         "(10, \"Je peux me souvenir de votre ville préférée pour la météo\"),"
 
 
