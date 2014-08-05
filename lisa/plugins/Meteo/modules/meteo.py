@@ -18,15 +18,22 @@
 #-----------------------------------------------------------------------------
 # Imports
 #-----------------------------------------------------------------------------
+#Mandatory
 from lisa.server.plugins.IPlugin import IPlugin
-from bs4 import BeautifulSoup
 import gettext
 import inspect
 import os, sys
+from lisa.Neotique.NeoTrans import NeoTrans
+from lisa.Neotique.NeoDialog import NeoDialog
+import logging
+
+
+#specific
+from bs4 import BeautifulSoup
 import requests
 import json
-import datetime
-from lisa.Neotique.NeoTrans import NeoTrans
+#import datetime
+from lisa.Neotique.NeoConv import NeoConv
 
 
 #-----------------------------------------------------------------------------
@@ -36,13 +43,16 @@ class Meteo(IPlugin):
     """
     Plugin main class
     """
-    def __init__(self):
+    def __init__(self,loglevel=logging.WARNING):
         super(Meteo, self).__init__()
 
         self.configuration_plugin = self.mongo.lisa.plugins.find_one({"name": "Meteo"})
         self.path = os.path.realpath(os.path.abspath(os.path.join(os.path.split(inspect.getfile(inspect.currentframe()))[0],os.path.normpath("../lang/"))))
         self._ = NeoTrans(domain='meteo',localedir=self.path,fallback=True,languages=[self.configuration_lisa['lang']]).Trans
 
+        logging.basicConfig(level=loglevel, format='%(levelname)s:%(message)s')
+        #logging.getLogger().setLevel(logging.WARNING)    #pour changer le niveau une fois le logger initialise
+        self.WITDate = NeoConv(self._).WITDate
     #-----------------------------------------------------------------------------
     #              Publics  Fonctions
     #-----------------------------------------------------------------------------
@@ -50,32 +60,37 @@ class Meteo(IPlugin):
         """
         ask for weather
         """
+        logging.debug('jsonInput : {}'.format(jsonInput))
         # Config city
         try:
             city = jsonInput['outcome']['entities']['location']['value']
         except:
             city = self.configuration_plugin['configuration']['city']   #default city
-
+        
         # Config unit
         if self.configuration_plugin['configuration']['temperature'] == "celsius":
             units = "metric"
         else:
             units = "imperial"
-
+        logging.debug('city and units : {},{}'.format(city, units))
+        
         #config date
-        #dMeteo = {'heureFin': u'19', 'heureDepart': u'12', 'jour': u'2014-06-14', 'moment': 'ApresMidi', 'deltaJour': 1}
-        dMeteo = self._decodeDateWIT(jsonInput)
-
+        #dMeteo = return = {'end': datetime.time(20,50), 'begin': datetime.time(12,00), 'date': datetime.date(2014, 7, 18), 'part': 'afternoon', 
+        #    'delta': 1, 'day' : 'Mon', 'tday' : 'Lundi', 'month':'July'}'tmonth':'Juil'}
+        dMeteo = self.WITDate(jsonInput)
+        logging.debug('Date : {}'.format(dMeteo))
+        
+        
         #requete de la meteo
-        if dMeteo['deltaJour'] < 0 :
+        if dMeteo['delta'] < 0 :
             return {"plugin": __name__.split('.')[-1], "method": sys._getframe().f_code.co_name, "body": self._("previous date")}
-        if dMeteo['deltaJour'] > 10 :
+        if dMeteo['delta'] > 10 :
             return {"plugin": __name__.split('.')[-1], "method": sys._getframe().f_code.co_name, "body": self._("not yet")}
         
-        if dMeteo['deltaJour'] == 0 :         #meteo de maintenant
+        if dMeteo['delta'] == 0 :         #meteo de maintenant
             weather = self._weatherAPINow(city, units)
         else :                                   #meteo du jour ou des jours suivants
-            weather = self._weatherAPIDaily(city, units, dMeteo['moment'], dMeteo['deltaJour'])
+            weather = self._weatherAPIDaily(city, units, dMeteo['part'], dMeteo['delta'])
         #weather in 3h
             #TODO ?
 
@@ -117,51 +132,7 @@ class Meteo(IPlugin):
     #-----------------------------------------------------------------------------
     #              privates functions
     #-----------------------------------------------------------------------------
-    def _decodeDateWIT(self, pjson):
-        #TODO a meliorer avec deaclage horaire
-        """
-        traduit la date WIT en jour et moment (matin, midi, soir), heure
-        """
-        dMeteo = {'jour': datetime.datetime.now().date(), 'deltaJour': 0, 'moment': 'TouteLaJournee', 'heureDepart': 00, 'heureFin': 00}
 
-        if pjson['outcome']['entities'].has_key('datetime') == True:
-            jourDepart = pjson['outcome']['entities']['datetime']['value']['from']
-            jourDepart = jourDepart[:jourDepart.index('T')]
-            #jourFin = pjson['outcome']['entities']['datetime']['value']['to']
-            #jourFin=jourFin[:jourFin.index('T')]
-            dMeteo['jour'] = jourDepart
-
-            #print datetime.datetime.now().date()
-            #print "###################################", datetime.datetime.strptime(pjson['outcome']['entities']['datetime']['value']['from'], '%Y-%m-%dT%H:%M:%S.000%Z:00')
-            delta = datetime.datetime.strptime(dMeteo['jour'], '%Y-%m-%d').date() - datetime.datetime.now().date()
-            #print delta
-            #print delta.days
-            dMeteo['deltaJour'] = delta.days
-
-            heureDepart = pjson['outcome']['entities']['datetime']['value']['from']
-            heureDepart = heureDepart.split('T')[1].split(':')[0]
-            heureFin = pjson['outcome']['entities']['datetime']['value']['to']
-            heureFin = heureFin.split('T')[1].split(':')[0]
-
-            #print heureDepart, heureFin
-            dMeteo['heureDepart'] = heureDepart
-            dMeteo['heureFin'] = heureFin
-
-            if heureDepart == "04" and heureFin=="12":
-                dMeteo['moment']="Matin"
-            elif heureDepart == "12" and heureFin=="19":
-                dMeteo['moment']="ApresMidi"
-            elif heureDepart == "18" and heureFin=="00":
-                dMeteo['moment']="Soiree"
-            elif heureDepart == "00" and heureFin=="00":
-                dMeteo['moment']="TouteLaJournee"
-            else :
-                dMeteo['moment']="TouteLaJournee"
-
-        #print "dMeteo   =", dMeteo
-        return dMeteo
-
-    #-----------------------------------------------------------------------------
     def _weatherAPINow(self, pcity, punits):
         """
         get actual weather
@@ -198,7 +169,11 @@ class Meteo(IPlugin):
         #}
 
         #verif
-        if r.json()['name'].lower().replace('-', ' ') <> pcity.lower().replace('-', ' '):
+        logging.debug('Internet Request : {}'.format(r.json()))
+        if 'message' in r.json():  #if no existing city
+            if r.json()['message'] == u'Error: Not found city' :
+                return self._("I dont know this city")
+        if r.json()['name'].lower().replace('-', ' ') <> pcity.lower().replace('-', ' '):  #in case of '-' in city name
             return self._("I dont know this city")
 
         if r.json().has_key('main') == False or r.json()['main'].has_key('temp') == False or  r.json()['main'].has_key('humidity') == False or \
@@ -207,13 +182,6 @@ class Meteo(IPlugin):
             return {"problem": self._('problem contacting server')}
 
         #construction message retour
-        #body = ", ".join([                                                     # ce truc est casse bonbon
-        #       self._('weather in city') % pcity,
-        #       self._('climat') % r.json()['weather'][0]['description'],
-        #       self._("temperature") % round(r.json()['main']['temp']),
-        #       #self._('humidity') % round(weather['main']['humidity']),
-        #       self._('wind speed') % self.__convertVent(r.json()['wind']['speed'])
-        #   ])
         body = ""
         body += self._('weather in city').format(pcity + " " + self._('now'))
         body += ", " + self._('climat').format(r.json()['weather'][0]['description'])
@@ -241,8 +209,6 @@ class Meteo(IPlugin):
             'cnt' : pCnt + 1,
             'type' : 'accurate',   #<-doesnt work well....
         })
-        if __name__ == "__main__" :
-            print "weather        ",json.dumps(r.json())
         #{"city": {
         #   "name": "Rochefort",
         #   "country": "FR",
@@ -274,15 +240,16 @@ class Meteo(IPlugin):
         #"cnt": 2}          ou 3/4/5 fonction du nb de liste
 
         #verif ville
-        if r.json()['city']['name'].lower().replace('-', ' ') <> pcity.lower().replace('-', ' '):
+        logging.debug('Internet Request : {}'.format(json.dumps(r.json())))
+        if 'message' in r.json():  #if no existing city
+            if r.json()['message'] == u'Error: Not found city' :
+                return self._("I dont know this city")
+        if r.json()['city']['name'].lower().replace('-', ' ') <> pcity.lower().replace('-', ' '):#in case of '-' in city name
             return self._("I dont know this city")
 
         #extrait le jour qui convient. La liste est rangee dans l'ordre croissant
-        if __name__ == "__main__" :
-            print "pcnt          ", pCnt
         r2 = r.json()['list'][pCnt]
-        if __name__ == "__main__" :
-            print "r2 =            ", r2
+
 
         #verif
         if r2.has_key('dt') == False or \
@@ -293,11 +260,6 @@ class Meteo(IPlugin):
             return {"problem": self._('problem contacting server')}
 
         #construction message retour
-        #body = ", ".join([                                                 #ce truc est casse bonbon
-        #       self._('weather in city') % pcity,
-        #       self._('climat') % r2['weather'][0]['description'],
-        #       #self._('wind speed') % self._convertVent(r2['speed']),
-        #])
         body =""
         body += self._('weather in city').format(pcity)
         if pCnt == 1 :
@@ -378,35 +340,5 @@ class Meteo(IPlugin):
         if pDeg > 292.5 and pDeg < 337.5 :
             return self._('North West')
 
-
-#-----------------------------------------------------------------------------
-# Tests
-#-----------------------------------------------------------------------------
-if __name__ == "__main__" :
-    jsonInput = {'from': u'Lisa-Web', 'zone': u'WebSocket', u'msg_id': u'c7e169a5-9d87-4a43-8a11-9fa75fd0e5ae',
-        u'msg_body': u'quelle est la m\xe9t\xe9o \xe0 Marseille demain ?',
-        u'outcome': {
-            u'entities': {
-                u'location': {u'body': u'Marseille', u'start': 22, u'end': 31, u'suggested': True, u'value': u'Marseille'},
-                u'datetime': {u'body': u'aujourd hui', u'start': 32, u'end': 38, u'value': {u'to': u'2014-07-08T00:00:00.000+02:00', u'from': u'2014-07-07T00:00:00.000+02:00'}}},
-            u'confidence': 0.999,
-            u'intent': u'meteo_getweather'},
-        'type': u'chat'}
-
-    jsonInput2 = {'from': u'Lisa-Web', 'zone': u'WebSocket', u'msg_id': u'c7e169a5-9d87-4a43-8a11-9fa75fd0e5ae',
-        u'msg_body': u'quelle est la m\xe9t\xe9o demain ?',
-        u'outcome': {
-            u'entities': {
-                u'datetime': {u'body': u'demain', u'start': 32, u'end': 38, u'value': {u'to': u'2014-07-08T00:00:00.000+02:00', u'from': u'2014-07-07T00:00:00.000+02:00'}}
-            },
-            u'confidence': 0.999,
-            u'intent': u'meteo_getweather'},
-        'type': u'chat'}
-
-
-    essai = Meteo()
-    retourn = essai.getWeather(jsonInput)
-    #retourn = essai.getWeather(jsonInput2)
-    print (retourn['body'])
 
 # --------------------- End of meteo.py  ---------------------

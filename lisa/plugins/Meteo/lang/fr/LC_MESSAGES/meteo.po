@@ -18,13 +18,18 @@ msgid "problem contacting server"
 msgstr  "Il y a eu un problème lors de la connexion au serveur de météo"
 
 msgid "I dont know this city"
-msgstr  "Je ne connais pas la ville demandée"
+msgstr  "(10,\"Je ne connais pas la ville demandée.\"),"
+        "(10,\"Je ne connais pas cette ville.\"),"
+        "(10,\"Je ne connais aucune ville avec ce nom.\"),"
+        "(10,\"Aucune ville de ce nom.\"),"
 
 msgid "Default city"
 msgstr  "La ville par défaut pour la météo est {0}"
 
 msgid "I don't understand city name"
-msgstr  "Je n'ai pas compris le nom de la ville"
+msgstr  "(10,\"Je n'ai pas compris le nom de la ville.\"),"
+        "(10,\"Je suis désolé, je n'ai pas compris le nom de la ville.\"),"
+        "(10,\"Pouvez-vous répéter le nom de la ville.\"),"
 
 
 #---------main
