@@ -1,34 +1,35 @@
 {
     "name": "Meteo",
-    "version": "1.0.0",
-    "author": "Guillaume",
-    "description": [
-        {"lang": "fr", "description": "Ce plugin permet de donner la météo"},
-        {"lang": "en", "description": "This plugin give the weather for a city"}
-    ],
-    "pypi-url": "https://pypi.python.org/pypi/lisa-plugin-Meteo",
-    "github-url": "https://raw.githubusercontent.com/Seraf/LISA-PLUGINS-Meteo/master/lisa/plugins/Meteo/meteo.json",
-    "enabled": 1,
-    "lang": ["fr","en"],
+    "version": "1.0",
+    "git-url": "git@git.neotique.fr:demonstrateur/plugin-meteo",
+    "author": "Guillaume Audet",
+    "i_can": "i_can_plugin",
     "configuration": {
         "city": "Paris",
         "temperature": "celsius",
-        "intents": {
-            "meteo_getweather": {
-                "method": "getWeather",
-                "corpus": {}
-            },
-            "meteo_setDefaultCity": {
-                "method": "setDefaultCity",
-                "corpus": {}
-            },
-            "meteo_getDefaultCity": {
-                "method": "getDefaultCity",
-                "corpus": {}
-            }
-        },
         "widgets": {
             "getWeather": "lisa.plugins.Meteo.web.views.weather"
+        }
+    },
+    "intents": {
+        "meteo_getweather": {
+            "method": "getWeather",
+            "i_can": "i_can_getWeather"
+        },
+        "meteo_setDefaultCity": {
+            "method": "setDefaultCity",
+            "i_can": "i_can_DefaultCity"
+        },
+        "meteo_getDefaultCity": {
+            "method": "getDefaultCity"
+        }
+    },
+    "crons": {
+    },
+    "context": {
+        "global": {
+        },
+        "client": {
         }
     }
 }

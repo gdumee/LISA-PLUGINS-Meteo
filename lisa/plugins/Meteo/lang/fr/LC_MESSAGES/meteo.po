@@ -1,19 +1,35 @@
+#-----------------------------------------------------------------------------
+# copyright   : Neotique
+#-----------------------------------------------------------------------------
 msgid ""
-msgstr ""
-"Project-Id-Version: 0.1\n"
-"Report-Msgid-Bugs-To: Guillaume\n"
-"POT-Creation-Date: 2013-09-22 09:30+0200\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Guillaume <julien.syx@lisa-project.net>\n"
-"Language-Team: FR <julien.syx@lisa-project.net>\n"
-"Language: fr\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
+msgstr  "Last-Translator: Guillaume Audet <guillaume.audet@neotique.fr>\n"
+        "Language-Team: Neotique>\n"
+        "Language: fr\n"
+        "MIME-Version: 1.0\n"
+        "Content-Type: text/plain; charset=UTF-8\n"
+        "Content-Transfer-Encoding: 8bit\n"
 
-#: ../../modules/meteo.py
 
-#---------error
+#-----------------------------------------------------------------------------
+# Plugin description
+#-----------------------------------------------------------------------------
+msgid "i_can_plugin"
+msgstr  "(10, \"Je peux vous donner la météo\"),"
+        "(10, \"Vous pouvez me demander la météo\"),"
+        "(10, \"Vous pouvez me demander les prévisions météo\"),"
+
+msgid "i_can_getWeather"
+msgstr  "(10, \"Je peux vous indiquer les prévisions météo sur 7 jours dans une ville\"),"
+        "(10, \"Je peux vous donner la météo d'une ville pour les 7 prochains jours\"),"
+
+msgid "i_can_DefaultCity"
+msgstr  "(10, \"Je peux mémoriser la ville par défaut quand vous me demander la météo\"),"
+        "(10, \"Je peux me souvenir de votre ville préférée pour la météo\"),"
+
+
+#-----------------------------------------------------------------------------
+# Errors
+#-----------------------------------------------------------------------------
 msgid "problem contacting server"
 msgstr  "Il y a eu un problème lors de la connexion au serveur de météo"
 
@@ -32,7 +48,9 @@ msgstr  "(10,\"Je n'ai pas compris le nom de la ville.\"),"
         "(10,\"Pouvez-vous répéter le nom de la ville.\"),"
 
 
-#---------main
+#-----------------------------------------------------------------------------
+# Plugins strings
+#-----------------------------------------------------------------------------
 msgid "weather in city"
 msgstr  "Voici le temps à {0}"
 
@@ -58,7 +76,7 @@ msgid "temperature"
 msgstr  "Il fait {0} degrés"
 
 msgid "future temperature"
-msgstr "La température sera de "
+msgstr  "La température sera de "
 
 msgid "morning"
 msgstr  "{0} degrés le matin"
@@ -92,7 +110,9 @@ msgstr  "(10, \"Je ne peux pas donner la météo des jours précedents\"),"
         "(10, \"Je ne connais pas la météo des jours passés\"),"
 
 
-#---------wind direction
+#-----------------------------------------------------------------------------
+# Wind direction
+#-----------------------------------------------------------------------------
 msgid "North"
 msgstr  "le Nord"
 
@@ -118,7 +138,9 @@ msgid "North West"
 msgstr  "le Nord Ouest"
 
 
-#---------month
+#-----------------------------------------------------------------------------
+# Months
+#-----------------------------------------------------------------------------
 msgid "January"
 msgstr  "janvier "
 
@@ -154,3 +176,5 @@ msgstr  "Novembre "
 
 msgid "December"
 msgstr  "Décembre "
+
+# --------------------- End of meteo.po  ---------------------
