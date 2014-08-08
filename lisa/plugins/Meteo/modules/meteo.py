@@ -24,7 +24,6 @@ import gettext
 import inspect
 import os, sys
 from lisa.Neotique.NeoTrans import NeoTrans
-from lisa.Neotique.NeoDialog import NeoDialog
 import logging
 
 
