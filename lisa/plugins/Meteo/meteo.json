@@ -5,7 +5,7 @@
     "author": "Guillaume Audet",
     "i_can": "i_can_plugin",
     "configuration": {
-        "city": "Sainte Marie de Ré",
+        "city": "Rochefort",
         "temperature": "celsius",
         "widgets": {
             "getWeather": "lisa.plugins.Meteo.web.views.weather"
