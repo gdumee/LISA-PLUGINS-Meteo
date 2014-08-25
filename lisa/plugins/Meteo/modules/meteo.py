@@ -48,7 +48,6 @@ class Meteo(IPlugin):
         loglevel=logging.WARNING # Tu n'as pas le droit de changer le constructeur des plugin, utilise un paramètre dans la configuration du serveur : configuration_server['debug']['log_level']
         logging.basicConfig(level=loglevel, format='%(levelname)s:%(message)s')
         #logging.getLogger().setLevel(logging.WARNING)    #pour changer le niveau une fois le logger initialise
-        self.WITDate = NeoConv(self._).WITDate
 
     #-----------------------------------------------------------------------------
     #              Publics  Fonctions
@@ -62,6 +61,7 @@ class Meteo(IPlugin):
         try:
             city = jsonInput['outcome']['entities']['location']['value']
         except:
+            print type(self.configuration_plugin['city'])
             city = self.configuration_plugin['city']   #default city
 
         # Config unit
@@ -74,7 +74,7 @@ class Meteo(IPlugin):
         #config date
         #dMeteo = return = {'end': datetime.time(20,50), 'begin': datetime.time(12,00), 'date': datetime.date(2014, 7, 18), 'part': 'afternoon',
         #    'delta': 1, 'day' : 'Mon', 'tday' : 'Lundi', 'month':'July'}'tmonth':'Juil'}
-        dMeteo = self.WITDate(jsonInput)
+        dMeteo = NeoConv.WITDate(jsonInput)
         logging.debug('Date : {}'.format(dMeteo))
 
 
